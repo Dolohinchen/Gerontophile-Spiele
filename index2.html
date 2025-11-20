@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <title>Hangman + Männchen</title>
+    
+
+  </head>
+    
+  <body>
+  <!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Bugatti Hangman</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #fff;
+    color: #000;
+    text-align: center;
+    padding: 20px;
+  }
+  #top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  #roleDisplay { font-size: 1.2em; font-weight: bold; }
+  #scoreBox { border: 2px solid #000; padding: 10px; font-weight: bold; width: 120px; height: 50px; }
+  #wordDisplay { font-size: 2em; letter-spacing: 10px; margin: 20px 0; }
+  #letters input { font-size: 1.5em; width: 40px; text-align: center; }
+  #usedLetters { margin-top: 10px; }
+  #imageDisplay { max-width: 100%; max-height: 400px; display: block; margin-left:auto; margin-right:auto; }
+  button { font-size: 1em; padding: 10px 20px; margin-top: 15px; }
+
+  /* Overlay für richtiges Wort */
+  #correctOverlay {
+    position: fixed;
+    top:0; left:0;
+    width:100vw; height:100vh;
+    background: rgba(0,0,0,0.8);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    color: #fff;
+    font-size: 2em;
+    z-index: 10;
+  }
+  #correctOverlay img {
+    width: auto;
+    height: 80vh;      
+    max-width: 95vw;   
+    object-fit: contain;
+    margin-top: 20px;  
+    border: 3px solid #fff;
+}
+  #correctOverlay button {
+    margin-top: 20px;
+    font-size: 1em;
+    padding: 10px 20px;
+  }
+
+  /* Canvas für Hangman */
+  #hangmanCanvas {
+    border:1px solid #000;
+    margin-top: 20px;
+    display: block;
+    margin-left:auto;
+    margin-right:auto;
+ }
+    body {
+      position: relative;
+      z-index: 0;
+  }
+
+  body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url("https://i.postimg.cc/8JH2PN3p/Whats-App-Bild-2025-11-11-um-11-33-30-a37050eb.jpg");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      opacity: 0.35;
+      z-index: -1;
+  }
+
+ body {
+    font-family: "Comic Sans MS";
+}
+  
+</style>
+</head>
+<body>
+  
+<div id="top-bar">
+  <div id="roleDisplay"></div>
+  <div id="scoreBox">Punkte: 0</div>
+</div>
+
+<h1>Bugatti Hangman</h1>
+<div id="wordDisplay"></div>
+
+<div id="letters">
+  <input type="text" id="letterInput" maxlength="1" autofocus>
+  <button onclick="guessLetter()">Raten</button>
+</div>
+
+<div id="usedLetters">Benutzte Buchstaben: </div>
+<img id="imageDisplay" src="" alt="">
+
+<canvas id="hangmanCanvas" width="200" height="250"></canvas>
+
+<!-- Overlay für richtiges Wort -->
+<div id="correctOverlay">
+  <div id="correctText">Richtig!</div>
+  <div id="correctWord"></div>
+  <img id="correctImage" src="">
+  <button onclick="nextRound()">Weiter</button>
+</div>
+
+<script>
+// Wörter
+const words = [
+"Judenklo","Sahara","Butterfingerfish","Lernhilfe","Doppel D","Entente","Anniak",
+"Oberlix Kost fast nix","Arno schwarznegga", "Moo Deng", "Katastrophal Schlecht",
+"Brandlwesen","Edward","Big Forehead Embryo","SCHMAN","Mhm jaa","Ambro",
+"Pferdezahn","Zahnfee","Fatfish","Kikaninchen","Biomüll","Bandscheibedurchfall",
+"Armenien","Neanderthaler","Wombat","Kamael","Apfelmus","Hagzissa",
+"Zwei mal Eis mit Kamael","Helmi","Bitte des da mit vier Löffel",
+"WERT","Satanus","Atompilz","Achtel","Butterfinger","weggebest","Dolohin",
+"Burg Traumastein","Globbi","Zebezus", "Klaus","Osterhaas","Opa Hubert","Schwingtitten",
+"Japien","Sizilizi","Makierfeifei","Albin Shabanaj","Ägyptus","fickstarter",
+"Balschiet","Crick","Pionierpflanze","HagHagHag","Schatzika",
+"Notstiege","Föab","Moto Moto","Hecke/Zaun","Haider","Lamborbaguette",
+"Chikachakachuka Remix","I love books","Globbi","Heidlbeere","Edward",
+"Trinkoschokolade","Siegfrid","Mammut(Kobler)","Gerontophilie","Baum fällt",
+"Herbert Kickl","Adi","Crepes","Auf meim Nawl steht Schwibbel Schwabbel",
+"Pils","Nicole","Jajaja","Kopiä","Robert, I dont like this Rock","Einstein", "Enaiat","Suppenwürfel","Peiner", "Zwischenplattform","Pic Send",
+"Kräcker","Ci Ci Alberto","1/2 sina = x/e","Lecka Lecka Socken",
+"Nicht Negativitätsbedingungen","Putzmann","Megamind","666 Hölle-Hotline",
+"Knieprobleme","Faj Faj","Hamster Bayer","Massimo","Sanin","Kaktus",
+"Ich hab dich auf","huuhg huuhg","Matlab","Futur Drei", "Salasandla", "Darkrobert", "Kojak, Kajak oder Anorak...Josephine: ANANAS"
+];
+
+// Bilder (alle originalen Bildlinks)
+const images = [
+"https://i.postimg.cc/5j1X5dRg/20240513-143001.jpg",
+"https://i.postimg.cc/PN4P2VGs/20240513-143002.jpg",
+"https://i.postimg.cc/MXxn02Lw/20240513-150835.jpg",
+"https://i.postimg.cc/NLYK8qn0/20240613-135202.jpg",
+"https://i.postimg.cc/7bD518WW/IMG-20230913-WA0001.jpg",
+"https://i.postimg.cc/MXxn02LS/IMG-20230913-WA0049.jpg",
+"https://i.postimg.cc/5j1X5dr9/IMG-20230915-WA0034.jpg",
+"https://i.postimg.cc/F1mYb56s/IMG-20230926-WA0027.jpg",
+"https://i.postimg.cc/8sHjtX8D/IMG-20230929-WA0054.jpg",
+"https://i.postimg.cc/w3V704Kg/IMG-20231004-WA0010.jpg",
+"https://i.postimg.cc/grDnNt9G/IMG-20231006-WA0020.jpg",
+"https://i.postimg.cc/XX8pQ1Mq/IMG-20231009-WA0010.jpg",
+"https://i.postimg.cc/6T0yYbs3/IMG-20231009-WA0013.jpg",
+"https://i.postimg.cc/xqRctprd/IMG-20231009-WA0014.jpg",
+"https://i.postimg.cc/SjrJD10J/IMG-20231010-WA0077.jpg",
+"https://i.postimg.cc/mhwt8pxz/IMG-20231013-WA0016.jpg",
+"https://i.postimg.cc/23wV29pL/IMG-20231018-WA0051.jpg",
+"https://i.postimg.cc/fkKJBq40/IMG-20231018-WA0061.jpg",
+"https://i.postimg.cc/qgLzjDfy/IMG-20231019-WA0006.jpg",
+"https://i.postimg.cc/Dmg8BpVd/IMG-20231031-WA0011.jpg",
+"https://i.postimg.cc/w3V704K5/IMG-20231104-WA0002.jpg",
+"https://i.postimg.cc/PN4P2VGQ/IMG-20231105-WA0083.jpg",
+"https://i.postimg.cc/Wh1tKmjr/IMG-20231105-WA0084.jpg",
+"https://i.postimg.cc/F7H1qbm0/IMG-20231106-WA0012.jpg",
+"https://i.postimg.cc/ctLVvPy0/makeitmeme-0rv-Ue.jpg",
+"https://i.postimg.cc/D4wtSRk0/makeitmeme-e-Bm-XB.jpg",
+"https://i.postimg.cc/Lhxcc4LX/makeitmeme-K8D33.gif",
+"https://i.postimg.cc/rRwvD7Xw/makeitmeme-swju-Q.jpg",
+ "https://i.postimg.cc/8JH2PN3p/Whats-App-Bild-2025-11-11-um-11-33-30-a37050eb.jpg",
+ "https://i.postimg.cc/475DNsM4/Whats-App-Bild-2025-11-11-um-11-34-04-c5176033.jpg",
+"https://i.postimg.cc/5Y3hNbrr/Whats-App-Bild-2025-11-11-um-11-37-26-864b2ded.jpg",
+"https://i.postimg.cc/ZC50gPZd/IMG-20231108-WA0024.jpg",
+"https://i.postimg.cc/xc1q7GYv/IMG-20231113-WA0014.jpg",
+"https://i.postimg.cc/Vdk5T91B/IMG-20231113-WA0015.jpg",
+"https://i.postimg.cc/Wh1tKmj8/IMG-20231113-WA0016.jpg",
+"https://i.postimg.cc/F7H1qbmZ/IMG-20231113-WA0017.jpg",
+"https://i.postimg.cc/YhCjVNkx/IMG-20231113-WA0018.jpg",
+"https://i.postimg.cc/F7H1qbmC/IMG-20231113-WA0019.jpg",
+"https://i.postimg.cc/7fZbc1DW/IMG-20231113-WA0020.jpg",
+"https://i.postimg.cc/mtghq3R0/IMG-20231113-WA0021.jpg",
+"https://i.postimg.cc/nChM5KZ5/IMG-20231115-WA0087-1.jpg",
+"https://i.postimg.cc/QHdVPghL/IMG-20231120-WA0057.jpg",
+"https://i.postimg.cc/4m2nTKNW/IMG-20231207-WA0006.jpg",
+"https://i.postimg.cc/tYv7H1Cr/IMG-20231208-WA0036.jpg",
+"https://i.postimg.cc/ppcyt9X1/IMG-20240113-WA0052.jpg",
+"https://i.postimg.cc/LnQhMq67/IMG-20240204-WA0017.jpg",
+"https://i.postimg.cc/JGDdwcSn/20230525-121426.jpg",
+"https://i.postimg.cc/QH9nLkvX/20230619-093819-1.jpg",
+"https://i.postimg.cc/SJ2t07Hj/20230913-101458.jpg",
+"https://i.postimg.cc/hfz3FbNv/20230913-103111.jpg",
+"https://i.postimg.cc/D89p74Ks/20231116-074541.jpg",
+"https://i.postimg.cc/8FDy68c8/20240116-080252.jpg",
+"https://i.postimg.cc/XZ32CMqC/20240209-085323.jpg",
+"https://i.postimg.cc/FY0WzF9G/20240309-201630.jpg",
+"https://i.postimg.cc/4K5Wv8HP/20240322-113120.jpg",
+"https://i.postimg.cc/7CVK1BJt/20240402-083318.jpg",
+"https://i.postimg.cc/tZ42BhFf/20240909-083241.jpg",
+"https://i.postimg.cc/5Y2nsw8p/20240912-150011.jpg",
+"https://i.postimg.cc/k6gfTxxd/20240912-150019.jpg",
+"https://i.postimg.cc/qhDQSzLC/20240913-113253-0.jpg",
+"https://i.postimg.cc/c66FYBxr/20250419-184856.jpg",
+"https://i.postimg.cc/vDD09tYn/20250617-200147.jpg",
+"https://i.postimg.cc/qgZZZZDf/626b807df44bc9656102547b7ac32e43-1710595519257-0.jpg",
+"https://i.postimg.cc/T5yQ6f7q/IMG-20230528-WA0004.jpg",
+  "https://i.postimg.cc/62MCZDH4/ann.jpg",
+  "https://i.postimg.cc/8JZLvqyF/condolo.jpg",
+  "https://i.postimg.cc/62MCZDHw/dolo.jpg",
+  "https://i.postimg.cc/qh12K9mv/fischbaby.jpg",
+  "https://i.postimg.cc/7GKSzpB5/s.jpg",
+  "https://i.postimg.cc/0z7mn6W8/Whats-App-Bild-2025-11-13-um-10-46-56-d4bebbb2.jpg",
+  "https://i.postimg.cc/PLhDRt9n/Whats-App-Bild-2025-11-13-um-10-46-57-adfb026e.jpg",
+  "https://i.postimg.cc/K1tLfK9C/Whats-App-Bild-2025-11-13-um-10-46-58-0aa3592a.jpg",
+  "https://i.postimg.cc/75S79Csv/Whats-App-Bild-2025-11-13-um-10-46-58-5e41a924.jpg",
+  "https://i.postimg.cc/zyTW7Ldx/Whats-App-Bild-2025-11-13-um-10-46-58-89f9b519.jpg",
+  "https://i.postimg.cc/68CRc7jX/Whats-App-Bild-2025-11-13-um-10-46-58-a27cf9a8.jpg",
+  "https://i.postimg.cc/4YptPK82/Whats-App-Bild-2025-11-13-um-10-46-59-8091f829.jpg",
+  "https://i.postimg.cc/GHWGvPj7/Whats-App-Bild-2025-11-13-um-10-46-59-9a6fef00.jpg",
+  "https://i.postimg.cc/qN2nwtmF/Whats-App-Bild-2025-11-13-um-10-46-59-a6073be6.jpg",
+  "https://i.postimg.cc/MvCV10Yt/Whats-App-Bild-2025-11-13-um-10-47-05-0849ca74.jpg",
+  "https://i.postimg.cc/hfkTV80x/Whats-App-Bild-2025-11-13-um-10-47-05-65fde23e.jpg",
+  "https://i.postimg.cc/N53mR8x2/Whats-App-Bild-2025-11-13-um-10-47-05-6cd1c75e.jpg",
+  "https://i.postimg.cc/KR6Bt75g/Whats-App-Bild-2025-11-13-um-10-47-05-e9e9ea72.jpg",
+  "https://i.postimg.cc/jLpPy6h5/Whats-App-Bild-2025-11-13-um-10-47-26-6e151d07.jpg",
+  "https://i.postimg.cc/zVsKTwkV/Whats-App-Bild-2025-11-13-um-10-47-26-cdc15caa.jpg",
+  "https://i.postimg.cc/kB6WVYW2/Whats-App-Bild-2025-11-13-um-10-47-27-67eb1d29.jpg",
+  "https://i.postimg.cc/SJ2cX1cj/Whats-App-Bild-2025-11-13-um-10-47-27-74dd22a3.jpg",
+  "https://i.postimg.cc/hfzVJZVd/Whats-App-Bild-2025-11-13-um-10-47-27-77298a53.jpg",
+  "https://i.postimg.cc/PPgY1bMq/Whats-App-Bild-2025-11-13-um-10-47-27-b0fcf640.jpg",
+  "https://i.postimg.cc/KR6Bt758/Whats-App-Bild-2025-11-13-um-10-47-27-c4a38b49.jpg",
+  "https://i.postimg.cc/PPp1LV1L/Whats-App-Bild-2025-11-13-um-10-47-42-3ba2b84e.jpg",
+  "https://i.postimg.cc/crgfKkfs/Whats-App-Bild-2025-11-13-um-10-47-44-d1542603.jpg",
+  "https://i.postimg.cc/kB6WVYWM/Whats-App-Bild-2025-11-13-um-10-47-47-cb9b3201.jpg",
+  "https://i.postimg.cc/9zNGQHwH/Whats-App-Bild-2025-11-13-um-10-47-48-435ea058.jpg",
+  "https://i.postimg.cc/fJtY3qYz/Whats-App-Bild-2025-11-13-um-10-47-48-64915837.jpg",
+  "https://i.postimg.cc/MvM1c31x/Whats-App-Bild-2025-11-13-um-10-47-48-7acd4a4c.jpg",
+  "https://i.postimg.cc/py1DLM5N/Whats-App-Bild-2025-11-13-um-10-47-53-1852d0ee.jpg",
+  "https://i.postimg.cc/HjPQk18D/Whats-App-Bild-2025-11-13-um-10-47-53-bdb305d8.jpg",
+  "https://i.postimg.cc/c65QLGgp/Whats-App-Bild-2025-11-13-um-10-47-54-e8a37317.jpg",
+  "https://i.postimg.cc/fkgxRQtB/Whats-App-Bild-2025-11-13-um-10-47-55-073ec259.jpg",
+  "https://i.postimg.cc/BtwxnfLp/Whats-App-Bild-2025-11-13-um-10-47-56-5581fad7.jpg",
+  "https://i.postimg.cc/V5HjkPrF/Whats-App-Bild-2025-11-13-um-10-47-58-34c6c84a.jpg",
+  "https://i.postimg.cc/CdKG0x1J/Whats-App-Bild-2025-11-13-um-10-48-01-5b34c119.jpg",
+  "https://i.postimg.cc/qg7srvRw/Whats-App-Bild-2025-11-13-um-10-48-03-6ced2903.jpg",
+  "https://i.postimg.cc/vDmryZB3/Whats-App-Bild-2025-11-13-um-10-48-04-60b5425e.jpg",
+  "https://i.postimg.cc/dD02FV18/Whats-App-Bild-2025-11-13-um-10-48-06-f3aad5fb.jpg",
+  "https://i.postimg.cc/qg7srvR3/Whats-App-Bild-2025-11-13-um-10-48-08-125b2069.jpg",
+  "https://i.postimg.cc/c6JRWLHg/Whats-App-Bild-2025-11-13-um-10-48-08-1dbbfdae.jpg",
+  "https://i.postimg.cc/ThPVx3wW/Whats-App-Bild-2025-11-13-um-10-48-10-db4367d1.jpg",
+  "https://i.postimg.cc/F1KyvHRr/Whats-App-Bild-2025-11-13-um-10-48-12-f62194b8.jpg",
+  "https://i.postimg.cc/wR3LQ0PC/Whats-App-Bild-2025-11-13-um-10-48-14-1b46e109.jpg",
+  "https://i.postimg.cc/PvNYQ2cB/Whats-App-Bild-2025-11-13-um-10-48-15-9eb1aa63.jpg",
+  "https://i.postimg.cc/kRDKvfZH/Whats-App-Bild-2025-11-13-um-10-48-17-465d762a.jpg",
+  "https://i.postimg.cc/9wzZYJSG/Whats-App-Bild-2025-11-13-um-10-48-20-4974b2e6.jpg",
+  "https://i.postimg.cc/2L3h72Jn/Whats-App-Bild-2025-11-13-um-10-48-22-737daf81.jpg",
+  "https://i.postimg.cc/hQhT1pwQ/Whats-App-Bild-2025-11-13-um-10-48-28-8d0b1c40.jpg",
+  "https://i.postimg.cc/30WmFn6G/Whats-App-Bild-2025-11-13-um-10-48-31-be1b2c1e.jpg"
+];
+
+// Spielvariablen
+let currentWord = "";
+let displayWord = [];
+let usedLetters = [];
+let round = 1;
+let score = 0;
+let errors = 0;
+
+const canvas = document.getElementById("hangmanCanvas");
+const ctx = canvas.getContext("2d");
+
+// Enter-Taste
+document.getElementById("letterInput").addEventListener("keypress", function(e){
+    if(e.key === "Enter") guessLetter();
+});
+
+// Runde starten
+function startRound() {
+    usedLetters = [];
+    errors = 0;
+    currentWord = words[Math.floor(Math.random()*words.length)].toUpperCase();
+    displayWord = currentWord.split("").map(c => (c.match(/[A-ZÄÖÜ]/i) ? "_" : c));
+    updateDisplay();
+    updateRole();
+    document.getElementById("usedLetters").textContent = "Benutzte Buchstaben: ";
+    document.getElementById("imageDisplay").src = "";
+    drawHangman();
+    document.getElementById("letterInput").focus();
+}
+
+// Anzeige aktualisieren
+function updateDisplay() {
+    document.getElementById("wordDisplay").textContent = displayWord.join(" ");
+}
+
+function updateRole() {
+    document.getElementById("roleDisplay").textContent = (round%2===1) ? 
+    "Spieler 1 ist Leiter, Spieler 2 rät" : "Spieler 2 ist Leiter, Spieler 1 rät";
+}
+
+// Buchstaben raten
+function guessLetter() {
+    let input = document.getElementById("letterInput");
+    let letter = input.value.toUpperCase();
+    input.value = "";
+    input.focus();
+    if(!letter.match(/[A-ZÄÖÜ]/i) || usedLetters.includes(letter)) return;
+    usedLetters.push(letter);
+    document.getElementById("usedLetters").textContent = "Benutzte Buchstaben: "+usedLetters.join(", ");
+
+    if(currentWord.includes(letter)){
+        for(let i=0;i<currentWord.length;i++){
+            if(currentWord[i]===letter) displayWord[i]=letter;
+        }
+    } else {
+        errors++;
+        drawHangman();
+    }
+    updateDisplay();
+    checkWinLose();
+}
+
+// Prüfen auf Sieg/Niederlage
+function checkWinLose() {
+    if(!displayWord.includes("_")) {
+        score++;
+        document.getElementById("scoreBox").textContent = "Punkte: "+score;
+        showCorrectOverlay();
+    } else if(errors >= 6){
+        score--;
+        document.getElementById("scoreBox").textContent = "Punkte: "+score;
+        drawHangman(); 
+        alert("☠️ Spieler "+((round%2===1)?"2":"1")+" hat verloren! Wort war: "+currentWord);
+        nextRound();
+    }
+}
+
+// Overlay anzeigen
+function showCorrectOverlay() {
+    const overlay = document.getElementById("correctOverlay");
+    const img = images[Math.floor(Math.random()*images.length)];
+    document.getElementById("correctImage").src = img;
+    document.getElementById("correctWord").textContent = currentWord;
+    overlay.style.display = "flex";
+}
+
+// Neue Runde
+function nextRound() {
+    document.getElementById("correctOverlay").style.display = "none";
+    round++;
+    startRound();
+}
+
+// Hangman zeichnen
+function drawHangman() {
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.strokeStyle = "#000";
+    ctx.lineWidth = 2;
+
+    // 1. Senkrechter Strich (Pfosten)
+    if(errors >= 1){
+        ctx.beginPath();
+        ctx.moveTo(50,240);
+        ctx.lineTo(50,20);
+        ctx.stroke();
+    }
+
+    // 2. Waagerechter Strich (Querbalken)
+    if(errors >= 2){
+        ctx.beginPath();
+        ctx.moveTo(50,20);
+        ctx.lineTo(120,20);
+        ctx.stroke();
+    }
+
+    // 3. Strick (Seil)
+    if(errors >= 3){
+        ctx.beginPath();
+        ctx.moveTo(120,20);
+        ctx.lineTo(120,40);
+        ctx.stroke();
+    }
+
+    // 4. Kopf
+    if(errors >= 4){
+        ctx.beginPath();
+        ctx.arc(120,60,20,0,Math.PI*2);
+        ctx.stroke();
+    }
+
+    // 5. Körper + Beine gleichzeitig
+    if(errors >= 5){
+        // Körper
+        ctx.beginPath();
+        ctx.moveTo(120,80);
+        ctx.lineTo(120,140);
+        ctx.stroke();
+
+        // Linkes Bein
+        ctx.beginPath();
+        ctx.moveTo(120,140);
+        ctx.lineTo(90,180);
+        ctx.stroke();
+
+        // Rechtes Bein
+        ctx.beginPath();
+        ctx.moveTo(120,140);
+        ctx.lineTo(150,180);
+        ctx.stroke();
+    }
+
+    // 6. Arme gleichzeitig
+    if(errors >= 6){
+        // Linker Arm
+        ctx.beginPath();
+        ctx.moveTo(120,100);
+        ctx.lineTo(90,120);
+        ctx.stroke();
+
+        // Rechter Arm
+        ctx.beginPath();
+        ctx.moveTo(120,100);
+        ctx.lineTo(150,120);
+        ctx.stroke();
+    }
+}
+
+// Spiel starten
+startRound();
+</script>
+
+</body>
+</html>
+    
+  </body>
+  
+</html>
