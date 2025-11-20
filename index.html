@@ -37,3 +37,77 @@
     h1 {
       padding: 50px 20px 20px;
       font-size: 2.5em;
+      text-shadow: 2px 2px 5px rgba(0,0,0,0.7);
+      position: relative;
+      z-index: 1;
+    }
+
+    .games-container {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 40px;
+      padding: 40px 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .game-card {
+      background: rgba(0, 0, 0, 0.6);
+      border-radius: 15px;
+      padding: 20px;
+      width: 220px;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .game-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+    }
+
+    .game-card img {
+      width: 100%;
+      border-radius: 10px;
+      margin-bottom: 15px;
+    }
+
+    .game-card a {
+      display: inline-block;
+      font-size: 1.2em;
+      color: #fff;
+      text-decoration: none;
+      font-weight: bold;
+      padding: 10px 15px;
+      border-radius: 10px;
+      background: #ff6b81;
+      transition: background 0.3s;
+    }
+
+    .game-card a:hover {
+      background: #ff4757;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Bitte wähle ein Spiel</h1>
+
+  <div class="games-container">
+    <div class="game-card">
+      <img src="https://i.postimg.cc/crjb0wdg/wbi.png" alt="Wer bin ich?">
+      <a href="spiel1/index4.html" target="_blank">Wer bin ich?</a>
+    </div>
+
+    <div class="game-card">
+      <img src="https://i.postimg.cc/2VJKrhC5/hgm.png" alt="Hangman">
+      <a href="spiel2/index2.html" target="_blank">Hangman</a>
+    </div>
+
+    <div class="game-card">
+      <img src="https://i.postimg.cc/crjb0wdt/zt.png" alt="Zitate Spiel">
+      <a href="spiel3/index3.html" target="_blank">Zitate Spiel</a>
+    </div>
+  </div>
+
+</body>
+</html>
