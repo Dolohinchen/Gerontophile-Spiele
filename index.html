@@ -3,616 +3,250 @@
 
   <head>
     <meta charset="UTF-8">
-    <title>Zitate Game</title>
+    <title>Wer bin ich? Prototyp</title>
     
 
   </head>
     
   <body>
-  <!doctype html>
+  <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Zitate Zuordnen — Spiel</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wer bin ich? Insidergame</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --bg:#0f1724;
-    --card:#0b1220;
-    --muted:#9aa8bf;
-    --accent:#6ee7b7;
-    --danger:#ff6b6b;
-    --success:#58d68d;
-    --glass: rgba(255,255,255,0.03);
-    font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-  }
-  html,body{height:100%;margin:0;background:
-    radial-gradient(ellipse at 10% 10%, rgba(46,96,255,0.06), transparent 10%),
-    radial-gradient(ellipse at 90% 80%, rgba(102,51,255,0.03), transparent 10%),
-    var(--bg);
-    color:#e6eef8;
-    -webkit-font-smoothing:antialiased;
-    -moz-osx-font-smoothing:grayscale;
-  }
-  .wrap{
-    max-width:1000px;
-    margin:36px auto;
-    padding:24px;
-    border-radius:16px;
-    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-    box-shadow: 0 10px 30px rgba(2,6,23,0.6);
-    min-height:560px;
-  }
-  header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
-  header h1{font-size:20px;margin:0}
-  .meta{color:var(--muted);font-size:14px}
-  .game{
-    display:grid;
-    grid-template-columns: 1fr 360px;
-    gap:20px;
-    align-items:start;
-  }
-  .quote-box{
-    background:var(--card);
-    border-radius:12px;
-    padding:20px;
-    min-height:220px;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:flex-start;
-    position:relative;
-    transition:box-shadow .18s ease, transform .12s ease;
-  }
-  .quote-text{
-    font-size:22px; line-height:1.25; margin:0 0 12px 0; white-space:pre-wrap;
-  }
-  .quote-author-prompt{color:var(--muted); font-size:14px}
-  .drop-target{
-    margin-top:12px;
-    display:flex;
-    gap:12px;
-    flex-wrap:wrap;
-  }
-  .drop-zone{
-    border:2px dashed rgba(255,255,255,0.06);
-    padding:18px;
-    border-radius:10px;
-    width:100%;
-    min-height:70px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    color:var(--muted);
-    background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent);
-  }
-  .names{
-    background:var(--card);
-    border-radius:12px;
-    padding:16px;
-    height:100%;
-    display:flex;
-    flex-direction:column;
-    gap:12px;
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
-  }
-  .names-list{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-  .name-card{
-    background:var(--glass);
-    padding:10px 12px;
-    border-radius:10px;
-    cursor:grab;
-    user-select:none;
-    box-shadow: 0 4px 10px rgba(2,6,23,0.45);
-    transition:transform .12s ease, box-shadow .12s ease;
-    text-align:center;
-    font-weight:600;
-  }
-  .name-card:active{cursor:grabbing; transform:scale(.995)}
-  .controls{display:flex;gap:8px;align-items:center;margin-top:12px}
-  button{
-    background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-    border:1px solid rgba(255,255,255,0.05);
-    padding:10px 14px;border-radius:10px;color:#e6eef8;font-weight:600;
-    cursor:pointer;
-  }
-  button.ghost{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted)}
-  button.primary{background:linear-gradient(90deg,var(--accent),#4fd1c5); color:#04201a;border:none}
-  .scorebar{display:flex;gap:10px;align-items:center}
-  .round-badge{background:rgba(255,255,255,0.03);padding:8px 10px;border-radius:999px;font-weight:700}
-  .result-overlay{
-    position:fixed;left:0;right:0;top:0;bottom:0;display:flex;align-items:center;justify-content:center;background:rgba(2,6,23,0.6);
-    z-index:50;backdrop-filter:blur(4px);visibility:hidden;opacity:0;transition:opacity .18s ease, visibility .18s;
-  }
-  .result-overlay.show{visibility:visible;opacity:1}
-  .result-card{
-    background:linear-gradient(180deg,#071025, #071223);padding:26px;border-radius:14px;min-width:320px;text-align:center;
-  }
- .result-card{
-  background:white;
-  padding:50px 36px;
-  border-radius:20px;
-  min-width:420px;
-  text-align:center;
-  box-shadow:0 10px 60px rgba(0,0,0,0.15);
+body {
+  margin:0; padding:0; font-family: 'Inter', sans-serif;
+  background: #f3f0fa; height:100vh; display:flex; flex-direction:column;
 }
-.result-card h2{
-  margin:0 0 14px 0;
-  font-size:26px;
-  color:#233040;
+#app { flex:1; display:flex; gap:12px; padding:12px; box-sizing:border-box; }
+.left { flex:1; display:flex; flex-direction:column; gap:10px; }
+.topbar { display:flex; justify-content:flex-start; align-items:center; gap:12px; }
+input[type=text] { padding:8px; border-radius:6px; border:1px solid #cfc0e3; outline:none; }
+button { padding:8px 12px; border:none; border-radius:6px; background:#bfa7e1; color:white; font-weight:600; cursor:pointer; transition:0.2s; }
+button:hover { background:#a986d1; }
+.board { display:flex; flex-wrap:wrap; gap:12px; background:white; padding:12px; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.08); justify-content:center; }
+.card { width:120px; height:180px; border-radius:12px; overflow:hidden; background:#eee; position:relative; cursor:pointer; display:flex; flex-direction:column; justify-content:flex-end; transition:0.3s; box-shadow:0 2px 6px rgba(0,0,0,0.1); transform-style:preserve-3d; }
+.card img { width:100%; height:calc(100% - 32px); object-fit:cover; position:absolute; top:0; left:0; backface-visibility:hidden; transition:transform 0.5s; }
+.card.flipped img { transform: rotateY(180deg); filter:brightness(0.6); }
+.card .name { position:relative; text-align:center; background:rgba(255,255,255,0.9); padding:6px; font-weight:600; z-index:1; font-size:14px; }
+.card.assigned { border: 3px solid #9f7aea; box-shadow: 0 0 12px rgba(159,122,234,0.6); }
+.myCardMark { position:absolute; top:6px; left:6px; background:#8c6fc2; color:white; padding:3px 6px; border-radius:999px; font-size:12px; }
+.right { width:300px; display:flex; flex-direction:column; gap:8px; }
+.chatBox { height:200px; background:white; padding:8px; border-radius:8px; overflow:auto; box-shadow:0 2px 6px rgba(0,0,0,0.08); }
+.chatInput { display:flex; gap:6px; }
+.message { padding:6px; border-radius:6px; margin-bottom:6px; background:#f4f0fa; }
+.sys { background:#e7dff8; border:1px solid #d5c1f3; }
+.overlayWin {
+  position:fixed; inset:0; background:rgba(160,130,220,0.75);
+  display:none; align-items:center; justify-content:center; color:white;
+  font-size:48px; font-weight:800; z-index:9999; pointer-events:none;
 }
-.result-big{
-  font-size:32px;
-  font-weight:800;
-  color:#2b9f85;
-}
-
-  }
 </style>
 </head>
 <body>
-<div class="wrap" role="application" aria-label="Zitate Zuordnen Spiel">
-  <header>
-    <div>
-      <h1>Zitate Zuordnen</h1>
-      <div class="meta">Zieh den richtigen Namen auf das Zitat — 5 Runden pro Spiel</div>
+
+<div id="overlayWin" class="overlayWin"></div>
+
+<div id="app">
+  <div class="left">
+    <div class="topbar">
+      <input id="nameInput" type="text" placeholder="Dein Name">
+      <button id="joinBtn">Mitspielen</button>
+      <button id="reshuffleBtn">Neue Runde</button>
     </div>
-    <div class="scorebar">
-      <div class="round-badge" id="roundBadge">Runde 1 / 5</div>
-      <div class="round-badge" id="scoreBadge">Punkte 0</div>
+    <div class="board" id="board"></div>
+    <div id="myAssignee">Deine Figur: –</div>
+  </div>
+
+  <div class="right">
+    <h3>Chat</h3>
+    <div class="chatBox" id="chatBox"></div>
+    <div class="chatInput">
+      <input id="chatInput" type="text" placeholder="Rate hier...">
+      <button id="sendBtn">Senden</button>
     </div>
-  </header>
-
-  <main class="game">
-    <section>
-      <div class="quote-box" id="quoteBox" aria-live="polite">
-        <div class="quote-text" id="quoteText">Lade...</div>
-        <div class="quote-author-prompt muted-small">Zieh hier den Namen der Person hin, die das gesagt hat.</div>
-
-        <div class="drop-target">
-          <div class="drop-zone" id="dropZone">Ziehe hier den Namen hin</div>
-        </div>
-
-        <div class="controls">
-          <button id="skipBtn" class="ghost">Überspringen</button>
-          <button id="newGameBtn" class="ghost">Neues Spiel</button>
-        </div>
-      </div>
-    </section>
-
-    <aside>
-      <div class="names">
-        <div class="muted-small">Wähle einen Namen und ziehe ihn auf das Zitat</div>
-        <div class="names-list" id="namesList">
-          <!-- Name cards werden hier erzeugt -->
-        </div>
-        <div class="footer">Spiel: 5 Runden • Nach jeder Antwort startet automatisch die nächste Runde</div>
-      </div>
-    </aside>
-  </main>
-</div>
-
-<!-- Ergebnis-Overlay -->
-<div class="result-overlay" id="resultOverlay" role="dialog" aria-modal="true">
-  <div class="result-card" id="resultCard">
-    <h2 id="resultTitle"></h2>
-    <div class="result-big" id="resultScore"></div>
-    <div style="margin-top:12px">
-      <button id="playAgainBtn" class="primary">Neues Spiel</button>
+    <div style="font-size:12px;color:#555;margin-top:6px">
+      Tipp: Schreib den genauen Namen einer Figur, um sie zu erraten.
     </div>
   </div>
 </div>
-  <!-- Falschantwort-Bild -->
-<div id="wrongImageOverlay" style="
-  position:fixed;
-  left:0; top:0; right:0; bottom:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:rgba(0,0,0,0.45);
-  backdrop-filter:blur(3px);
-  visibility:hidden;
-  opacity:0;
-  transition:opacity .18s ease;
-  z-index:200;
-">
-  <img src="https://i.postimg.cc/mZPHVwbQ/tmok.jpg" 
-       style="max-width:60%; border-radius:14px; box-shadow:0 10px 40px rgba(0,0,0,0.5);">
-</div>
 
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 
 <script>
-/* --- DATEN: Autoren und Zitate (aus deiner Datei) ---
-   Die Zitate stammen aus der hochgeladenen Datei (siehe Referenz).
-   Jede Kette ist exakt zugeordnet zu einem Autor.
-*/
-const data = [
-  { author: "Pilzi", quote: "„Habts ihr noch nie Schnä gesehen oder was“" },
-  { author: "Pilzi", quote: "„Fjünf“" },
-  { author: "Pilzi", quote: "„Hot scho jeder ADHS?“" },
-  { author: "Pilzi", quote: "„Ja i bin Ausländer“" },
+document.addEventListener("DOMContentLoaded", () => {
 
-  { author: "Brandl", quote: "„da sollen euro klingelklocken leuten so richrig so tschuuwww ding ding ding ding ding… wuuw“" },
+  // --- FIREBASE CONFIG ---
+  const firebaseConfig = {
+    apiKey: "AIzaSyAXXHLJPP67EHXIMe_9PehkXYVwOH_zBJY",
+    authDomain: "werbinich-1844b.firebaseapp.com",
+    projectId: "werbinich-1844b",
+    storageBucket: "werbinich-1844b.firebasestorage.app",
+    messagingSenderId: "764697272510",
+    appId: "1:764697272510:web:938d984bdc171b05477eef",
+    measurementId: "G-XHWG350T51"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  const db = firebase.firestore();
 
-  { author: "Schina", quote: "„Achtel”" },
-  { author: "Schina", quote: "“i hob a poster plakat gmocht damit zirkusse abgetrieben werden“" },
-  { author: "Schina", quote: "„hallo kinder, darf ich an euch lecken?“" },
-  { author: "Schina", quote: "“Mei Ambros wird heid Katstriert“" },
-  { author: "Schina", quote: "„Wichtige Frage, Tender mit Milch oder Haselnuss ->Innen oder aussen ->Innen dikka ->INNEN“" },
-  { author: "Schina", quote: "„Ich bin links rechts farbenblind“" },
-  { author: "Schina", quote: "„Dei Hand riecht nach Vape. LOSS MI AN DEINA HAND RIECHEN! I BIN SÜCHTIG DANACH“" },
-  { author: "Schina", quote: "„Bro wie schmeckt batterie”" },
-  { author: "Schina", quote: "“Sehr geehrter FEHLER”" },
-  { author: "Schina", quote: "“…I bin a nicht nicht…..Aba dann bist dus ja wieder…..Oba wir hom Jo gsogt dass a nicht des is…..Also a nicht is a schon“" },
-  { author: "Schina", quote: "“des hast i bin hööh oba i was i bin hööh“" },
-  { author: "Schina", quote: "“Der Kaktus wird grade zum Hugoooo“" },
-  { author: "Schina", quote: "„ Inn im Riedkreis“" },
-  { author: "Schina", quote: "„I pick im Müll“" },
-  { author: "Schina", quote: "„Des is ka waschbecken des is a stadt“" },
-  { author: "Schina", quote: "„müstl”" },
-  { author: "Schina", quote: "Geh nach Nürnberg und lass dir die Lippen nass machen" },
-  { author: "Schina", quote: "Brandausfall" }, 
-   { author: "Schina", quote: "ois wos hot is raucht oba ned ois wos raucht is hot" },
-  { author: "Schina", quote: "Kopfhöhrerschwanz " },
-  { author: "Schina", quote: "“Aaaaaa meine nudellll”" },
+  const characters = [
+  { img:"https://i.postimg.cc/vDmryZB3/Whats-App-Bild-2025-11-13-um-10-48-04-60b5425e.jpg",name:"Sli" },
+  { img:"https://i.postimg.cc/dD02FV18/Whats-App-Bild-2025-11-13-um-10-48-06-f3aad5fb.jpg",name:"Schina" },
+  { img:"https://i.postimg.cc/wyzSMbMY/dolchen.jpg",name:"Dolo" },
+  { img:"https://i.postimg.cc/SN7fjBL7/Whats-App-Bild-2025-11-13-um-16-23-53-6e89d2d5.jpg",name:"Marier" },
+    { img: "https://i.postimg.cc/KvcC5YCY/Marcus.jpg", name: "Marcus" },
+  { img: "https://iili.io/fJpK5KP.md.jpg", name: "Schredder" },
+  { img: "https://iili.io/fJpK7l1.jpg", name: "Sehr Nervig" },
+  { img:"https://i.postimg.cc/JHWSyYhW/20240912-150019-Kopie.jpg",name:"Albin Shabanaj" },
+    { img:"https://i.postimg.cc/PpDB5ndX/ambro.jpg",name:"Ambro" },
+    { img:"https://i.postimg.cc/YGFJCBtS/brandl.jpg",name:"Brandl" },
+    { img:"https://i.postimg.cc/gXhf2bm7/butter.jpg",name:"Butterfinger" },
+    { img:"https://i.postimg.cc/7GzpZrq6/degel.jpg",name:"Degel" },
+    { img:"https://i.postimg.cc/njm6hfp5/edward.jpg",name:"Edward" },
+    { img:"https://i.postimg.cc/MMBhpJzK/globi.jpg",name:"Globbi" },
+    { img:"https://i.postimg.cc/N9XWjvQY/haasi.jpg",name:"Kamael" },
+    { img:"https://i.postimg.cc/KkTd8hmx/hagc.jpg",name:"HAGC" },
+    { img:"https://i.postimg.cc/bDnKwfqc/haider.jpg",name:"Haider" },
+    { img:"https://i.postimg.cc/KkTd8hxd/heidl.jpg",name:"Heidlbeere" },
+    { img:"https://i.postimg.cc/KkTd8hxp/jahu.jpg",name:"JAHU" },
+    { img:"https://i.postimg.cc/wyNSjY9x/keniafrau.jpg",name:"Keniafrau" },
+    { img:"https://i.postimg.cc/5YzZ2WbR/kinbacher.jpg",name:"Kinbacher" },
+    { img:"https://i.postimg.cc/v1kJyZFh/klaus.jpg",name:"Klausi" },
+    { img:"https://i.postimg.cc/xJmW1Vns/kobler.jpg",name:"Kobler" },
+    { img:"https://i.postimg.cc/njm6hfpT/megally.jpg",name:"Megally" },
+    { img:"https://i.postimg.cc/bDnKwfpT/neco.jpg",name:"Neco" },
+    { img:"https://i.postimg.cc/DJGtw37T/nicole.jpg",name:"Nicole" },
+    { img:"https://i.postimg.cc/zL6sNGZQ/papst.jpg",name:"Papst" },
+    { img:"https://i.postimg.cc/7CdF4Z8J/pilzi.jpg",name:"Pilzi" },
+    { img:"https://i.postimg.cc/GBVWRmwz/rupi.jpg",name:"Rupi" },
+    { img: "https://i.postimg.cc/Y9hjcVtj/siggi.jpg", name: "Sigfried" },
+    { img:"https://i.postimg.cc/VSpxwkQR/satanus.jpg",name:"Satanus" },
+    { img:"https://i.postimg.cc/sBqkzgdH/schman.jpg",name:"SCHMAN" },
+    { img:"https://i.postimg.cc/7CdF4Z8K/schoki.jpg",name:"Trinkoschokolade" },
+    { img:"https://i.postimg.cc/Ff8MvH5n/shoy.jpg",name:"Knusperburg" },
+    { img:"https://i.postimg.cc/mz90gWBj/wert.jpg",name:"Wert" },
+        { img: "https://iili.io/fJpKToQ.png", name: "Chukim" },
+  { img: "https://iili.io/fJpKxNj.png", name: "Dilfinger" },
+  { img: "https://iili.io/fJpKoAb.png", name: "Lutschi" },
+  { img: "https://iili.io/fJpKnHu.jpg", name: "Baum Fällt" },
+  { img: "https://iili.io/fJpKzDx.jpg", name: "Putzfraumann" }
+  ];
 
-  { author: "Dolo", quote: "“mit Stolz”" },
-  { author: "Dolo", quote: "“herr titel titel titel”" },
-  { author: "Dolo", quote: "„Chikachakachuka Remiiiix“" },
-  { author: "Dolo", quote: "„Flatus Maximus/Feichta Flatus“" }, 
-  { author: "Dolo", quote: "Wenn Tisch 4 ist kann man nd Tisch hoch Sessel" },
-  { author: "Dolo", quote: "„Ugo sta vendendo il cocaino”" },
-  { author: "Dolo", quote: "„A U Bahn is ka Straßenbahn“" },
-  { author: "Dolo", quote: "„DES HOD KA ALPHA“" },
-  { author: "Dolo", quote: "„2500 Brotsteuer“" },
-  { author: "Dolo", quote: "„muas mei parfum verblenden“" },
-  { author: "Dolo", quote: "„mah der opa riecht foi guad“" },
-  { author: "Dolo", quote: "„Mei status is mono, des is mei einziger status“" },
-  { author: "Dolo", quote: "„Darkrobert Dark“" },
-  { author: "Dolo", quote: "„emódoló“" },
-  { author: "Dolo", quote: "„Štefan Bondorondo”" },
-  { author: "Dolo", quote: "„Nach 5 Monaten ist Samstag zu Sonntag geworden“" },
-  { author: "Dolo", quote: "„Oster Haas”" },
-  { author: "Dolo", quote: "„i hob scho moi unabsichtlich wörter in excel multipliziert“" },
-  { author: "Dolo", quote: "” Glatzenkondom“" },
-  { author: "Dolo", quote: "” Bitte des mid via löffen * aggressives stäbchen tippen*“" },
-  { author: "Dolo", quote: "„negeR tmmok negroM“" },
-  { author: "Dolo", quote: "„VOJAKOJAK“" },
-  { author: "Dolo", quote: "„hä konturierst du dei nase\n\nna?\n\naso donn host du di an strich\n\nMARIA😦\n\nSCHWINGTITTEN🫨😮😱“" },
-  { author: "Dolo", quote: "„BUUTTERFINGUUR“" },
-  { author: "Dolo", quote: "Gonz zum Ernst" },
-  { author: "Dolo", quote: "Brududu" },
-  { author: "Dolo", quote: "So, jz geh I aufs Bett und ins Klo" },
-  { author: "Dolo", quote: "Verbrannter Hund mit Butter" },
-  { author: "Dolo", quote: "Erkalterung" },
-  { author: "Dolo", quote: "„Potschischtinnen und Potschischten“" },
-  { author: "Dolo", quote: "„Faktor... FICK DI”" },
-  { author: "Dolo", quote: "„alles klärchen, gummibärchen“" },
-  { author: "Dolo", quote: "„schwedwood klingt wie balschiet“" },
-  { author: "Dolo", quote: "„Die Sahnfee hat mir Lugenkrebs gegeben, die hat neben mir feifei geraucht“" },
-  { author: "Dolo", quote: "„du na du du »" },
-  { author: "Dolo", quote: "I berühr dei Arschloch" },
-  { author: "Dolo", quote: "Ferien auf dem Bauern" },
-  { author: "Dolo", quote: "I muas kurz in müll" },
-  { author: "Dolo", quote: "« Gasförmige Butter »" },
-  { author: "Dolo", quote: "„N*ga-Butan”" },
-   { author: "Dolo", quote: "des neges, dem negen" },
-   { author: "Dolo", quote: "„N*ga-Butan”" },
-  { author: "Dolo", quote: "des dritte weintrauben-reich" },
-  { author: "Dolo", quote: "« McdONaLd iNsEl »" },
+  let me = {uid:null,name:null,assignedIndex:null};
+  let currentRound = 1;
 
-  { author: "Sli", quote: "“ex-callou-se me”" },
-  { author: "Sli", quote: "« lockeisen“" },
-  { author: "Sli", quote: "„I miassat echt naiv sei dass i des vagiss, drum stö I erm da Eliza vua, soi a de heiraten de klane hua“" },
-  { author: "Sli", quote: "„Bist-BITCH“" },  
-  { author: "Sli", quote: "my english is not englishing rn" },
-  { author: "Sli", quote: "„Scheidungstische“" },
-  { author: "Sli", quote: "„Welcome to Einsteino ASMR....I am chi chi Alberto lo ah and thissss is my taco Fernando“" },
-  { author: "Sli", quote: "„I hob ka \"zuletzt gelöscht\"“" },
+  const boardEl=document.getElementById("board");
+  const chatBox=document.getElementById("chatBox");
+  const chatInput=document.getElementById("chatInput");
+  const joinBtn=document.getElementById("joinBtn");
+  const reshuffleBtn=document.getElementById("reshuffleBtn");
+  const myAssigneeEl=document.getElementById("myAssignee");
+  const overlayWin=document.getElementById("overlayWin");
 
-  { author: "Marier", quote: "„FICK DICG IN BEIDE KNIESCHEIBEN DU SCHEIS UNKRAUT“" },
-  { author: "Marier", quote: "„Schuidigung, I bin Fisch“" },
-  { author: "Marier", quote:  "Oberlix kost fast nix" },
-  { author: "Marier", quote: "„Auf meim Nawl, Nawl? NAWI! Steht, Schwibbel Schwabbel du Huansohn“" },
-  { author: "Marier", quote: "„Hawara nd lustig oida hier stinkt es nach tote nackte ente“" },
-  { author: "Marier", quote: "„Megalondon“" },
-  { author: "Marier", quote: "weggebest" },
-  { author: "Marier", quote: "„Diese sind Gespräche viel Komfort“" },
-  { author: "Marier", quote: "ich rauch später meine spicker" },
-  { author: "Marier", quote: "„Autokotrekut“" },
-  { author: "Marier", quote: "„Gleber“" },
-  { author: "Marier", quote: "Beziehungsrätzl" },
-  { author: "Marier", quote: "„es is jo stimmt“" },
-  { author: "Marier", quote: "„Platsch platsch Fußball klatsch fisch“" },
-  { author: "Marier", quote: "„We have difference between moose and elk ….dark”" },
-  { author: "Marier", quote: "“Mount Washbum”" },
-  { author: "Marier", quote: "„Warum hast du Momo ersagt“" },
-  { author: "Marier", quote: "„Obwohl sandalen so fancy aber will meine Zehen nd offenbaren“" },
-  { author: "Marier", quote: "„ Schmeckt foi muffig, I glaub er (Haas) wascht sei Unterhose ned“" },
-  { author: "Marier", quote: "„Slaaaayyy Pepsi“" },
-  { author: "Marier", quote: "„ Schuidigung Service, Hauptspeise is schwoaz“" },
-  { author: "Marier", quote: "„do steht GUM“" },
-  { author: "Marier", quote: "„Ich hab meine Fingern Kurzgeschnitten“" },
-  { author: "Marier", quote: "„Kadavra Avavra“" },
-  { author: "Marier", quote: "„Ich hab deine 20 Rudolf“" },
-  { author: "Marier", quote: "„I bin a Treppe, und es is scheiße Treppe zu sein“" },
-  { author: "Marier", quote: "„Wer hätt ned gern Kuhmuschi“" },
-  { author: "Marier", quote: "„Hallo schuldigung, ich hab meinen Hund nackt rassiert? - a passt schon, nd so schlimm”" },
-  { author: "Marier", quote: "„I versklav a manchmal Menschen“" },
-  { author: "Marier", quote: "„GEISTLICHE FÜRSTEN“" },
-  { author: "Marier", quote: "„Preis und Kondomepolitik“" },
-  { author: "Marier", quote: "„Was ist Hauptstadt von Niederösterreich….LIECHTENSTEIN“" },
-  { author: "Marier", quote: "„Dann wirst du bezeichnet Heftlos“" },
-  { author: "Marier", quote: "„Des schaut aus wie so a Urmenschlauber“" },
-  { author: "Marier", quote: "„War lustige Zeit mit Albin Shabanaj aba jetzt ist es vorbei „" },
-  { author: "Marier", quote: "„Des letzte kimmt zum Schluss“" },
-  { author: "Marier", quote: "„Ich rieche wie ein Drogen“" },
-  { author: "Marier", quote: "” Meine kräcker brännnnen”" },
-  { author: "Marier", quote: "”Was heißt Magro auf Deutsch?.... Hässlich, fett, KLEIN”" },
-  { author: "Marier", quote: "” Annika is des Präfix von Alkohol”" },
-  { author: "Marier", quote: "„Im dunklen...vergeeewaltigt”" },
-  { author: "Marier", quote: "„Schatzi Pepsi Bebi”" },
-  { author: "Marier", quote: "„Seite: Behindert“" },
-  { author: "Marier", quote: "„Der hod foi de am....am dings *spielt mit kinn *....gleich...Einstein.....traumaaug“" },
-  { author: "Marier", quote: "„🥰He was your first love, I intend to be your last🥰 👺🦅AEREGAGEEEE👺🦅”" },
-  { author: "Marier", quote: "“I sammle grod mei Spucke I konn ned reden”" },
-
-  { author: "Baum fällt", quote: "„and so on and so fort”" },
-
-  { author: "Papst", quote: "“ajo stimmt du bist jo schwoaz”" },
-  { author: "Papst", quote: "„bewahrt mich vor einem abstürz“" },
-  { author: "Papst", quote: "„Sogts afoch los oda alleopp oda so”" },
-  { author: "Papst", quote: "„HAST DU JEMALS AN EINER VERSCHWÖRUNG GEGEN SCIENTOLOGY TEILGENOMMEN!?!?!“" },
-
-  { author: "Bela (Freund von Marias Mutter)", quote: "JUNGE DIESER NEGER HAT MIR KEINEN STROHHALM GEGEBEN" },
-
-  { author: "Megally", quote: "„#WERT muss weg“" },
-  { author: "Megally", quote: "„Miassn wir männlich weiblich und zimmernummer a markieren…Na des ned….Ausser männlich weiblich…A JO UND ZIMMERNUMMER A“" },
-
-  { author: "Heidlbeere", quote: "„nimm zwei, zahl drei“" },
-  { author: "Heidlbeere", quote: "„a neues Baby des ma aufn Markt bringen“" },
-  { author: "Heidlbeere", quote: "„ich trau nicht einmal den wolkerl da oben…. den clouds“" },
-  { author: "Heidlbeere", quote: "„der HALLO effekt 😄… halo.. hmm … blabla wird das gesamtbild VERSCHLEIERT“" },
-  { author: "Heidlbeere", quote: "„Ich hab eine schirche handschrift… WEIL ICH BIN LINKSHÄNDER“" },
-  { author: "Heidlbeere", quote: "„Keine E Autos ohne Kinder die in den Minen in Kongo E Autos abbauen“" },
-
-  { author: "JAHU", quote: "Ostheopero- pore- pere- Ostheoporese. OSTHEOPOROSE" },
-  { author: "JAHU", quote: "die aktivieren donn tequilla zellen" },
-  { author: "Vizepräsident Ottie", quote: "„Liebe junge FreunTinnen und FreunTe“" },
-  { author: "Vizepräsident Ottie", quote: "„Eckoissmus“" },
-  { author: "Vizepräsident Ottie", quote: "„Kohle Und Stahl… warum kohle und stahl… was sind die gemeinsamkeiten VON KOHLE UND STAHLLLL ?“" },
-  { author: "Vizepräsident Ottie", quote: "„Äeiruppa Parlamentt“" },
-  { author: "Vizepräsident Ottie", quote: "„Nicht jeder muss gleich sein“" },
-  { author: "Vizepräsident Ottie", quote: "„Es ist...bleibt...ist...hier eine Stopppptaffel“" },
-  { author: "Vizepräsident Ottie", quote: "„Vom Österreichischen Bildungssystem...da kann man nur sagen...das is bei allen schwächen eines der schwächsten“" },
-
-  { author: "Degel", quote: "„Den Dreck- Deck- Dreck- Dr- Dreckel ahhh ehhh DECKEL. Hergott Na“" },
-  { author: "Degel", quote: "„I will ma so a Kinesenkostüm kaufen“" },
-  { author: "Degel", quote: "„Ihr Spastis“" },
-  { author: "Degel", quote: "„Des braune do ignorieren wir, des is kimma eh wegschmeissen“" },
-  { author: "Degel", quote: "„wir schwule schauen dann auch nochmal drüber „" },
-
-  { author: "Butterfinger", quote: "„Die wahl is ungültig, weil erstens die fpö gewählt wird. Und zweitens dann auch noch eine Vorzugsstimme bei der ÖVP abgegeben wurde“" },
-  { author: "Butterfinger", quote: "„das leben ist kein feuchter furz“" },
-
-  { author: "Ambros", quote: "„Do gibts an Fachausdruck dafir, der fongt mit G an und endet mit N, GSCHISSN\" *agressives wisch wisch *“" },
-  { author: "Ambros", quote: "„SAKRAMENT NURMOI“" },
-
-  { author: "KINC", quote: "„ich verhü- ich hüte mich“" },
-  { author: "KINC", quote: "„er muas spät entschieden hobn dass er krank is“" },
-  { author: "KINC", quote: "„Wir verkaufen und produzieren ein Nussmüsli, und wir wollen ein Nussmüsli produzieren und verkaufen „" },
-  { author: "KINC", quote: "„spauchdreiseldrüse“" }
-];
-
-/* --- Hilfsfunktionen --- */
-function shuffle(a){
-  for(let i=a.length-1;i>0;i--){
-    const j=Math.floor(Math.random()*(i+1));
-    [a[i],a[j]]=[a[j],a[i]];
+  function renderBoard(flipped={}) {
+    boardEl.innerHTML="";
+    characters.forEach((c,i)=>{
+      const card=document.createElement("div");
+      card.className="card"+(flipped[i]?" flipped":"");
+      if(me.assignedIndex===i) card.classList.add("assigned");
+      const img=document.createElement("img"); img.src=c.img;
+      const name=document.createElement("div"); name.className="name"; name.textContent=c.name;
+      if(me.assignedIndex===i){
+        const badge=document.createElement("div"); badge.className="myCardMark"; badge.textContent="DEINE";
+        card.appendChild(badge);
+      }
+      card.addEventListener("click",()=>card.classList.toggle("flipped"));
+      card.append(img,name);
+      boardEl.appendChild(card);
+    });
   }
-  return a;
-}
-function uniqueAuthors(){
-  return Array.from(new Set(data.map(d=>d.author)));
-}
 
-/* --- Spielzustand --- */
-const TOTAL_ROUNDS = 5;
-let round = 0;
-let score = 0;
-let usedQuotes = new Set();
-let current = null; // {author, quote}
-let availableQuotes = data.slice(); // remaining quotes to pick from
+  async function assignCharacter(){
+    const snap=await db.collection("players").get();
+    const used=new Set();
+    snap.forEach(d=>{if(d.data().assignedIndex!==undefined) used.add(d.data().assignedIndex);});
+    const unused=characters.map((_,i)=>i).filter(i=>!used.has(i));
+    const pick=unused.length?unused[Math.floor(Math.random()*unused.length)]:Math.floor(Math.random()*characters.length);
+    me.assignedIndex=pick;
+    myAssigneeEl.textContent=`Deine Figur: ${characters[pick].name}`;
+    await db.collection("players").doc(me.uid).set({name:me.name,assignedIndex:pick,solved:false});
+    renderBoard();
+  }
 
-/* --- DOM Referenzen --- */
-const quoteText = document.getElementById('quoteText');
-const namesList = document.getElementById('namesList');
-const dropZone = document.getElementById('dropZone');
-const roundBadge = document.getElementById('roundBadge');
-const scoreBadge = document.getElementById('scoreBadge');
-const skipBtn = document.getElementById('skipBtn');
-const newGameBtn = document.getElementById('newGameBtn');
-const resultOverlay = document.getElementById('resultOverlay');
-const resultTitle = document.getElementById('resultTitle');
-const resultScore = document.getElementById('resultScore');
-const playAgainBtn = document.getElementById('playAgainBtn');
+  function listenRealtime(){
+    db.collection("messages").orderBy("ts").onSnapshot(s=>{
+      chatBox.innerHTML="";
+      s.forEach(d=>{
+        const m=d.data();
+        const el=document.createElement("div");
+        el.className="message"+(m.type==="system"?" sys":"");
+        el.innerHTML=`<strong>${m.from||"System"}</strong>: ${m.text}`;
+        chatBox.appendChild(el);
+      });
+      chatBox.scrollTop = chatBox.scrollHeight;
+    });
+  }
 
-/* --- Drag & Drop handlers --- */
-function onDragStart(e){
-  e.dataTransfer.setData('text/plain', e.target.dataset.author);
-  requestAnimationFrame(()=> e.target.classList.add('dragging'));
-}
-function onDragEnd(e){
-  e.target.classList.remove('dragging');
-}
+  async function sendChat(){
+    const text = chatInput.value.trim(); if(!text) return;
+    chatInput.value="";
+    await db.collection("messages").add({from:me.name,text,ts:firebase.firestore.FieldValue.serverTimestamp(),type:"chat"});
+    checkGuess(text,me.name);
+  }
 
-dropZone.addEventListener('dragover', (e) => {
-  e.preventDefault();
-  dropZone.style.borderColor = 'rgba(255,255,255,0.12)';
-});
-dropZone.addEventListener('dragleave', () => {
-  dropZone.style.borderColor = 'rgba(255,255,255,0.06)';
-});
-
-dropZone.addEventListener('drop', (e) => {
-  e.preventDefault();
-  dropZone.style.borderColor = 'rgba(255,255,255,0.06)';
-  const droppedAuthor = e.dataTransfer.getData('text/plain');
-  handleGuess(droppedAuthor);
-});
-
-/* --- Spiel-Logik --- */
-function startGame(){
-  round = 0;
-  score = 0;
-  usedQuotes.clear();
-  availableQuotes = data.slice();
-  updateUI();
-  nextRound();
-}
-
-function updateUI(){
-  roundBadge.textContent = `Runde ${Math.min(round+1, TOTAL_ROUNDS)} / ${TOTAL_ROUNDS}`;
-  scoreBadge.textContent = `Punkte ${score}`;
-}
-
-function pickQuote(){
-  if(availableQuotes.length === 0){
-    // refill if accidentally empty (shouldn't normally happen)
-    availableQuotes = data.filter(d => !usedQuotes.has(d.quote));
-    if(availableQuotes.length === 0){
-      availableQuotes = data.slice();
+  async function checkGuess(text,playerName){
+    const lower=text.toLowerCase();
+    const snap = await db.collection("players").get();
+    let match = null;
+    snap.forEach(d=>{
+      const data = d.data();
+      const char = characters[data.assignedIndex];
+      if(char.name.toLowerCase() === lower && !data.solved) match={id:d.id,name:char.name};
+    });
+    if(match){
+      overlayWin.textContent=`RICHTIG! ${playerName} hat ${match.name} erraten!`;
+      overlayWin.style.display="flex";
+      setTimeout(()=>{ overlayWin.style.display="none"; startNewRound(); }, 3000);
     }
   }
-  shuffle(availableQuotes);
-  const q = availableQuotes.pop();
-  usedQuotes.add(q.quote);
-  return q;
-}
 
-function nextRound(){
-  if(round >= TOTAL_ROUNDS){
-    endGame();
-    return;
-  }
-  current = pickQuote();
-  renderCurrent();
-  renderNames();
-  updateUI();
-  // Note: round is incremented after user answers (so it starts at 0)
-}
-
-function renderCurrent(){
-  quoteText.textContent = current.quote;
-  dropZone.textContent = 'Ziehe hier den Namen hin';
-  dropZone.classList.remove('correct','wrong');
-  // make sure no leftover name highlights
-  document.querySelectorAll('.name-card').forEach(n=> n.classList.remove('correct','wrong'));
-}
-
-function renderNames(){
-  // pick correct author + 3 random other authors
-  const authors = uniqueAuthors().filter(a => a !== current.author);
-  shuffle(authors);
-  const options = [current.author, ...authors.slice(0,3)];
-  shuffle(options);
-  namesList.innerHTML = '';
-  for(const a of options){
-    const card = document.createElement('div');
-    card.className = 'name-card';
-    card.draggable = true;
-    card.dataset.author = a;
-    card.textContent = a;
-    card.addEventListener('dragstart', onDragStart);
-    card.addEventListener('dragend', onDragEnd);
-    namesList.appendChild(card);
-  }
-}
-
-function markCorrectCard(author){
-  const cards = Array.from(document.querySelectorAll('.name-card'));
-  const c = cards.find(x => x.dataset.author === author);
-  if(c) c.classList.add('correct');
-}
-
-function markWrongCard(author){
-  const cards = Array.from(document.querySelectorAll('.name-card'));
-  const c = cards.find(x => x.dataset.author === author);
-  if(c) c.classList.add('wrong');
-}
-
-function handleGuess(author){
-  // disable further drops until next round
-  const drop = dropZone;
-  drop.style.pointerEvents = 'none';
-  const isCorrect = (author === current.author);
-  if(isCorrect){
-    score++;
-    drop.classList.add('correct');
-    drop.textContent = `Richtig — ${current.author}`;
-    markCorrectCard(author);
-  } else {
-    drop.classList.add('wrong');
-    drop.textContent = `Falsch — richtig wäre: ${current.author}`;
-    markWrongCard(author);
-     const overlay = document.getElementById("wrongImageOverlay");
-    overlay.style.visibility = "visible";
-    overlay.style.opacity = "1";
-    setTimeout(() => {
-      overlay.style.opacity = "0";
-      overlay.style.visibility = "hidden";
-    }, 900);
-  }
-  updateUI();
-
-  // increase round count (this attempt consumes one round)
-  round++;
-  // small delay damit Benutzer Ergebnis sieht, dann nächste Runde oder Ende
-  setTimeout(() => {
-    drop.style.pointerEvents = 'auto';
-    if(round >= TOTAL_ROUNDS){
-      endGame();
-    } else {
-      nextRound();
+  async function startNewRound(){
+    currentRound++;
+    const msgs = await db.collection("messages").get(); msgs.forEach(m=>m.ref.delete());
+    const players = await db.collection("players").get();
+    for(const p of players.docs){
+      const newChar=Math.floor(Math.random()*characters.length);
+      await p.ref.update({assignedIndex:newChar,solved:false});
+      if(p.id===me.uid){
+        me.assignedIndex=newChar;
+        myAssigneeEl.textContent=`Deine Figur: ${characters[newChar].name}`;
+      }
     }
-  }, 900);
-}
-
-function skipQuote(){
-  // Do not increment round; pick a new quote (not used yet)
-  if(usedQuotes.size >= data.length){
-    // all used -> allow reset of used set except current one
-    usedQuotes = new Set([current.quote]);
-    availableQuotes = data.filter(d => !usedQuotes.has(d.quote));
+    renderBoard();
   }
-  current = pickQuote();
-  renderCurrent();
-  renderNames();
-}
 
-/* --- Endgame --- */
-function endGame(){
-  resultTitle.textContent = 'Spiel beendet';
-  resultScore.textContent = `Erreicht: ${score} / ${TOTAL_ROUNDS}`;
-  resultOverlay.classList.add('show');
-}
+  // --- EventListener ---
+  joinBtn.addEventListener("click", async ()=>{
+    const name = document.getElementById("nameInput").value.trim();
+    if(!name) return alert("Bitte gib einen Namen ein.");
+    const u = await auth.signInAnonymously();
+    me.uid = u.user.uid;
+    me.name = name;
+    await assignCharacter();
+    listenRealtime();
+  });
 
-/* --- Events --- */
-skipBtn.addEventListener('click', () => {
-  skipQuote();
+  reshuffleBtn.addEventListener("click", startNewRound);
+  document.getElementById("sendBtn").addEventListener("click", sendChat);
+  chatInput.addEventListener("keydown", e=>{if(e.key==="Enter") sendChat();});
+
 });
-
-newGameBtn.addEventListener('click', () => {
-  startGame();
-});
-
-playAgainBtn.addEventListener('click', () => {
-  resultOverlay.classList.remove('show');
-  startGame();
-});
-
-/* --- Initialisierung --- */
-startGame();
 </script>
 </body>
 </html>
