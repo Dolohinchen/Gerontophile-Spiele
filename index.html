@@ -3,13 +3,79 @@
 <head>
   <meta charset="UTF-8">
   <title>Gerontophile-Spiele</title>
+  <!-- Google Font für jugendlichen Look -->
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    /* Grund-Styles */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Rubik', sans-serif;
+      background-image: url('https://i.postimg.cc/9QjH4jPP/Whats-App-Bild-2025-11-11-um-11-33-30-a37050eb.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      color: #fff;
+      text-align: center;
+    }
+
+    h1 {
+      padding: 50px 20px 20px;
+      font-size: 2.5em;
+      text-shadow: 2px 2px 5px rgba(0,0,0,0.7);
+    }
+
+    /* Container für Spiele */
+    .games-container {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 40px;
+      padding: 50px 20px;
+    }
+
+    .game-card {
+      background: rgba(0, 0, 0, 0.6);
+      border-radius: 15px;
+      padding: 20px;
+      width: 220px;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .game-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+    }
+
+    .game-card img {
+      width: 100%;
+      border-radius: 10px;
+      margin-bottom: 15px;
+    }
+
+    .game-card a {
+      display: inline-block;
+      font-size: 1.2em;
+      color: #fff;
+      text-decoration: none;
+      font-weight: bold;
+      padding: 10px 15px;
+      border-radius: 10px;
+      background: #ff6b81;
+      transition: background 0.3s;
+    }
+
+    .game-card a:hover {
+      background: #ff4757;
+    }
+
+    /* Responsive */
+    @media (max-width: 800px) {
+      .games-container {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+  </style>
 </head>
-<body>
-  <h1>Bitte wähle das Spiel aus das du willst</h1>
-  <ul>
-    <li><a href="spiel1/index4.html" target="_blank">Wer bin ich?</a></li>
-    <li><a href="spiel2/index2.html" target="_blank">Hangman</a></li>
-    <li><a href="spiel3/index3.html" target="_blank">Zitate Spiel</a></li>
-  </ul>
-</body>
-</html>
+<body
