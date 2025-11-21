@@ -1,15 +1,4 @@
 <!DOCTYPE html>
-<html lang="en">
-
-  <head>
-    <meta charset="UTF-8">
-    <title>Wer bin ich? Prototyp</title>
-    
-
-  </head>
-    
-  <body>
-  <!DOCTYPE html>
 <html lang="de">
 <head>
 <meta charset="UTF-8">
@@ -81,176 +70,167 @@ button:hover { background:#a986d1; }
 <script>
 document.addEventListener("DOMContentLoaded", () => {
 
-  // --- FIREBASE CONFIG ---
-  const firebaseConfig = {
-    apiKey: "AIzaSyAXXHLJPP67EHXIMe_9PehkXYVwOH_zBJY",
-    authDomain: "werbinich-1844b.firebaseapp.com",
-    projectId: "werbinich-1844b",
-    storageBucket: "werbinich-1844b.firebasestorage.app",
-    messagingSenderId: "764697272510",
-    appId: "1:764697272510:web:938d984bdc171b05477eef",
-    measurementId: "G-XHWG350T51"
-  };
-  firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
-  const db = firebase.firestore();
+const firebaseConfig = {
+  apiKey: "AIzaSyAXXHLJPP67EHXIMe_9PehkXYVwOH_zBJY",
+  authDomain: "werbinich-1844b.firebaseapp.com",
+  projectId: "werbinich-1844b",
+  storageBucket: "werbinich-1844b.firebasestorage.app",
+  messagingSenderId: "764697272510",
+  appId: "1:764697272510:web:938d984bdc171b05477eef",
+  measurementId: "G-XHWG350T51"
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
 
-  const characters = [
+const characters = [
   { img:"https://i.postimg.cc/vDmryZB3/Whats-App-Bild-2025-11-13-um-10-48-04-60b5425e.jpg",name:"Sli" },
   { img:"https://i.postimg.cc/dD02FV18/Whats-App-Bild-2025-11-13-um-10-48-06-f3aad5fb.jpg",name:"Schina" },
   { img:"https://i.postimg.cc/wyzSMbMY/dolchen.jpg",name:"Dolo" },
   { img:"https://i.postimg.cc/SN7fjBL7/Whats-App-Bild-2025-11-13-um-16-23-53-6e89d2d5.jpg",name:"Marier" },
-    { img: "https://i.postimg.cc/KvcC5YCY/Marcus.jpg", name: "Marcus" },
+  { img: "https://i.postimg.cc/KvcC5YCY/Marcus.jpg", name: "Marcus" },
   { img: "https://iili.io/fJpK5KP.md.jpg", name: "Schredder" },
   { img: "https://iili.io/fJpK7l1.jpg", name: "Sehr Nervig" },
   { img:"https://i.postimg.cc/JHWSyYhW/20240912-150019-Kopie.jpg",name:"Albin Shabanaj" },
-    { img:"https://i.postimg.cc/PpDB5ndX/ambro.jpg",name:"Ambro" },
-    { img:"https://i.postimg.cc/YGFJCBtS/brandl.jpg",name:"Brandl" },
-    { img:"https://i.postimg.cc/gXhf2bm7/butter.jpg",name:"Butterfinger" },
-    { img:"https://i.postimg.cc/7GzpZrq6/degel.jpg",name:"Degel" },
-    { img:"https://i.postimg.cc/njm6hfp5/edward.jpg",name:"Edward" },
-    { img:"https://i.postimg.cc/MMBhpJzK/globi.jpg",name:"Globbi" },
-    { img:"https://i.postimg.cc/N9XWjvQY/haasi.jpg",name:"Kamael" },
-    { img:"https://i.postimg.cc/KkTd8hmx/hagc.jpg",name:"HAGC" },
-    { img:"https://i.postimg.cc/bDnKwfqc/haider.jpg",name:"Haider" },
-    { img:"https://i.postimg.cc/KkTd8hxd/heidl.jpg",name:"Heidlbeere" },
-    { img:"https://i.postimg.cc/KkTd8hxp/jahu.jpg",name:"JAHU" },
-    { img:"https://i.postimg.cc/wyNSjY9x/keniafrau.jpg",name:"Keniafrau" },
-    { img:"https://i.postimg.cc/5YzZ2WbR/kinbacher.jpg",name:"Kinbacher" },
-    { img:"https://i.postimg.cc/v1kJyZFh/klaus.jpg",name:"Klausi" },
-    { img:"https://i.postimg.cc/xJmW1Vns/kobler.jpg",name:"Kobler" },
-    { img:"https://i.postimg.cc/njm6hfpT/megally.jpg",name:"Megally" },
-    { img:"https://i.postimg.cc/bDnKwfpT/neco.jpg",name:"Neco" },
-    { img:"https://i.postimg.cc/DJGtw37T/nicole.jpg",name:"Nicole" },
-    { img:"https://i.postimg.cc/zL6sNGZQ/papst.jpg",name:"Papst" },
-    { img:"https://i.postimg.cc/7CdF4Z8J/pilzi.jpg",name:"Pilzi" },
-    { img:"https://i.postimg.cc/GBVWRmwz/rupi.jpg",name:"Rupi" },
-    { img: "https://i.postimg.cc/Y9hjcVtj/siggi.jpg", name: "Sigfried" },
-    { img:"https://i.postimg.cc/VSpxwkQR/satanus.jpg",name:"Satanus" },
-    { img:"https://i.postimg.cc/sBqkzgdH/schman.jpg",name:"SCHMAN" },
-    { img:"https://i.postimg.cc/7CdF4Z8K/schoki.jpg",name:"Trinkoschokolade" },
-    { img:"https://i.postimg.cc/Ff8MvH5n/shoy.jpg",name:"Knusperburg" },
-    { img:"https://i.postimg.cc/mz90gWBj/wert.jpg",name:"Wert" },
-        { img: "https://iili.io/fJpKToQ.png", name: "Chukim" },
+  { img:"https://i.postimg.cc/PpDB5ndX/ambro.jpg",name:"Ambro" },
+  { img:"https://i.postimg.cc/YGFJCBtS/brandl.jpg",name:"Brandl" },
+  { img:"https://i.postimg.cc/gXhf2bm7/butter.jpg",name:"Butterfinger" },
+  { img:"https://i.postimg.cc/7GzpZrq6/degel.jpg",name:"Degel" },
+  { img:"https://i.postimg.cc/njm6hfp5/edward.jpg",name:"Edward" },
+  { img:"https://i.postimg.cc/MMBhpJzK/globi.jpg",name:"Globbi" },
+  { img:"https://i.postimg.cc/N9XWjvQY/haasi.jpg",name:"Kamael" },
+  { img:"https://i.postimg.cc/KkTd8hmx/hagc.jpg",name:"HAGC" },
+  { img:"https://i.postimg.cc/bDnKwfqc/haider.jpg",name:"Haider" },
+  { img:"https://i.postimg.cc/KkTd8hxd/heidl.jpg",name:"Heidlbeere" },
+  { img:"https://i.postimg.cc/KkTd8hxp/jahu.jpg",name:"JAHU" },
+  { img:"https://i.postimg.cc/wyNSjY9x/keniafrau.jpg",name:"Keniafrau" },
+  { img:"https://i.postimg.cc/5YzZ2WbR/kinbacher.jpg",name:"Kinbacher" },
+  { img:"https://i.postimg.cc/v1kJyZFh/klaus.jpg",name:"Klausi" },
+  { img:"https://i.postimg.cc/xJmW1Vns/kobler.jpg",name:"Kobler" },
+  { img:"https://i.postimg.cc/njm6hfpT/megally.jpg",name:"Megally" },
+  { img:"https://i.postimg.cc/bDnKwfpT/neco.jpg",name:"Neco" },
+  { img:"https://i.postimg.cc/DJGtw37T/nicole.jpg",name:"Nicole" },
+  { img:"https://i.postimg.cc/zL6sNGZQ/papst.jpg",name:"Papst" },
+  { img:"https://i.postimg.cc/7CdF4Z8J/pilzi.jpg",name:"Pilzi" },
+  { img:"https://i.postimg.cc/GBVWRmwz/rupi.jpg",name:"Rupi" },
+  { img: "https://i.postimg.cc/Y9hjcVtj/siggi.jpg", name: "Sigfried" },
+  { img:"https://i.postimg.cc/VSpxwkQR/satanus.jpg",name:"Satanus" },
+  { img:"https://i.postimg.cc/sBqkzgdH/schman.jpg",name:"SCHMAN" },
+  { img:"https://i.postimg.cc/7CdF4Z8K/schoki.jpg",name:"Trinkoschokolade" },
+  { img:"https://i.postimg.cc/Ff8MvH5n/shoy.jpg",name:"Knusperburg" },
+  { img:"https://i.postimg.cc/mz90gWBj/wert.jpg",name:"Wert" },
+  { img: "https://iili.io/fJpKToQ.png", name: "Chukim" },
   { img: "https://iili.io/fJpKxNj.png", name: "Dilfinger" },
   { img: "https://iili.io/fJpKoAb.png", name: "Lutschi" },
   { img: "https://iili.io/fJpKnHu.jpg", name: "Baum Fällt" },
   { img: "https://iili.io/fJpKzDx.jpg", name: "Putzfraumann" }
-  ];
+];
 
-  let me = {uid:null,name:null,assignedIndex:null};
-  let currentRound = 1;
+let me = {uid:null,name:null,assignedIndex:null};
+const boardEl=document.getElementById("board");
+const chatBox=document.getElementById("chatBox");
+const chatInput=document.getElementById("chatInput");
+const joinBtn=document.getElementById("joinBtn");
+const reshuffleBtn=document.getElementById("reshuffleBtn");
+const myAssigneeEl=document.getElementById("myAssignee");
+const overlayWin=document.getElementById("overlayWin");
 
-  const boardEl=document.getElementById("board");
-  const chatBox=document.getElementById("chatBox");
-  const chatInput=document.getElementById("chatInput");
-  const joinBtn=document.getElementById("joinBtn");
-  const reshuffleBtn=document.getElementById("reshuffleBtn");
-  const myAssigneeEl=document.getElementById("myAssignee");
-  const overlayWin=document.getElementById("overlayWin");
-
-  function renderBoard(flipped={}) {
-    boardEl.innerHTML="";
-    characters.forEach((c,i)=>{
-      const card=document.createElement("div");
-      card.className="card"+(flipped[i]?" flipped":"");
-      if(me.assignedIndex===i) card.classList.add("assigned");
-      const img=document.createElement("img"); img.src=c.img;
-      const name=document.createElement("div"); name.className="name"; name.textContent=c.name;
-      if(me.assignedIndex===i){
-        const badge=document.createElement("div"); badge.className="myCardMark"; badge.textContent="DEINE";
-        card.appendChild(badge);
-      }
-      card.addEventListener("click",()=>card.classList.toggle("flipped"));
-      card.append(img,name);
-      boardEl.appendChild(card);
-    });
-  }
-
-  async function assignCharacter(){
-    const snap=await db.collection("players").get();
-    const used=new Set();
-    snap.forEach(d=>{if(d.data().assignedIndex!==undefined) used.add(d.data().assignedIndex);});
-    const unused=characters.map((_,i)=>i).filter(i=>!used.has(i));
-    const pick=unused.length?unused[Math.floor(Math.random()*unused.length)]:Math.floor(Math.random()*characters.length);
-    me.assignedIndex=pick;
-    myAssigneeEl.textContent=`Deine Figur: ${characters[pick].name}`;
-    await db.collection("players").doc(me.uid).set({name:me.name,assignedIndex:pick,solved:false});
-    renderBoard();
-  }
-
-  function listenRealtime(){
-    db.collection("messages").orderBy("ts").onSnapshot(s=>{
-      chatBox.innerHTML="";
-      s.forEach(d=>{
-        const m=d.data();
-        const el=document.createElement("div");
-        el.className="message"+(m.type==="system"?" sys":"");
-        el.innerHTML=`<strong>${m.from||"System"}</strong>: ${m.text}`;
-        chatBox.appendChild(el);
-      });
-      chatBox.scrollTop = chatBox.scrollHeight;
-    });
-  }
-
-  async function sendChat(){
-    const text = chatInput.value.trim(); if(!text) return;
-    chatInput.value="";
-    await db.collection("messages").add({from:me.name,text,ts:firebase.firestore.FieldValue.serverTimestamp(),type:"chat"});
-    checkGuess(text,me.name);
-  }
-
-  async function checkGuess(text,playerName){
-    const lower=text.toLowerCase();
-    const snap = await db.collection("players").get();
-    let match = null;
-    snap.forEach(d=>{
-      const data = d.data();
-      const char = characters[data.assignedIndex];
-      if(char.name.toLowerCase() === lower && !data.solved) match={id:d.id,name:char.name};
-    });
-    if(match){
-      overlayWin.textContent=`RICHTIG! ${playerName} hat ${match.name} erraten!`;
-      overlayWin.style.display="flex";
-      setTimeout(()=>{ overlayWin.style.display="none"; startNewRound(); }, 3000);
+function renderBoard(flipped={}) {
+  boardEl.innerHTML="";
+  characters.forEach((c,i)=>{
+    const card=document.createElement("div");
+    card.className="card"+(flipped[i]?" flipped":"");
+    if(me.assignedIndex===i) card.classList.add("assigned");
+    const img=document.createElement("img"); img.src=c.img;
+    const name=document.createElement("div"); name.className="name"; name.textContent=c.name;
+    if(me.assignedIndex===i){
+      const badge=document.createElement("div"); badge.className="myCardMark"; badge.textContent="DEINE";
+      card.appendChild(badge);
     }
-  }
-
-  async function startNewRound(){
-    currentRound++;
-    const msgs = await db.collection("messages").get(); msgs.forEach(m=>m.ref.delete());
-    const players = await db.collection("players").get();
-    for(const p of players.docs){
-      const newChar=Math.floor(Math.random()*characters.length);
-      await p.ref.update({assignedIndex:newChar,solved:false});
-      if(p.id===me.uid){
-        me.assignedIndex=newChar;
-        myAssigneeEl.textContent=`Deine Figur: ${characters[newChar].name}`;
-      }
-    }
-    renderBoard();
-  }
-
-  // --- EventListener ---
-  joinBtn.addEventListener("click", async ()=>{
-    const name = document.getElementById("nameInput").value.trim();
-    if(!name) return alert("Bitte gib einen Namen ein.");
-    const u = await auth.signInAnonymously();
-    me.uid = u.user.uid;
-    me.name = name;
-    await assignCharacter();
-    listenRealtime();
+    card.addEventListener("click",()=>card.classList.toggle("flipped"));
+    card.append(img,name);
+    boardEl.appendChild(card);
   });
+}
 
-  reshuffleBtn.addEventListener("click", startNewRound);
-  document.getElementById("sendBtn").addEventListener("click", sendChat);
-  chatInput.addEventListener("keydown", e=>{if(e.key==="Enter") sendChat();});
+async function assignCharacter(){
+  const snap=await db.collection("players").get();
+  const used=new Set();
+  snap.forEach(d=>{if(d.data().assignedIndex!==undefined) used.add(d.data().assignedIndex);});
+  const unused=characters.map((_,i)=>i).filter(i=>!used.has(i));
+  const pick=unused.length?unused[Math.floor(Math.random()*unused.length)]:Math.floor(Math.random()*characters.length);
+  me.assignedIndex=pick;
+  myAssigneeEl.textContent=`Deine Figur: ${characters[pick].name}`;
+  await db.collection("players").doc(me.uid).set({name:me.name,assignedIndex:pick,solved:false});
+  renderBoard();
+}
+
+function listenRealtime(){
+  db.collection("messages").orderBy("ts").onSnapshot(s=>{
+    chatBox.innerHTML="";
+    s.forEach(d=>{
+      const m=d.data();
+      const el=document.createElement("div");
+      el.className="message"+(m.type==="system"?" sys":"");
+      el.innerHTML=`<strong>${m.from||"System"}</strong>: ${m.text}`;
+      chatBox.appendChild(el);
+    });
+    chatBox.scrollTop = chatBox.scrollHeight;
+  });
+}
+
+async function sendChat(){
+  const text = chatInput.value.trim(); if(!text) return;
+  chatInput.value="";
+  await db.collection("messages").add({from:me.name,text,ts:firebase.firestore.FieldValue.serverTimestamp(),type:"chat"});
+  checkGuess(text,me.name);
+}
+
+async function checkGuess(text,playerName){
+  const lower=text.toLowerCase();
+  const snap = await db.collection("players").get();
+  let match = null;
+  snap.forEach(d=>{
+    const data = d.data();
+    const char = characters[data.assignedIndex];
+    if(char.name.toLowerCase() === lower && !data.solved) match={id:d.id,name:char.name};
+  });
+  if(match){
+    overlayWin.textContent=`RICHTIG! ${playerName} hat ${match.name} erraten!`;
+    overlayWin.style.display="flex";
+    setTimeout(()=>{ overlayWin.style.display="none"; newRoundLocal(); }, 3000);
+  }
+}
+
+// --- Neue Runde lokal ---
+function newRoundLocal(){
+  // Neuen Charakter zuweisen
+  const oldIndex = me.assignedIndex;
+  let newIndex;
+  do { newIndex = Math.floor(Math.random()*characters.length); } while(newIndex===oldIndex);
+  me.assignedIndex = newIndex;
+  myAssigneeEl.textContent=`Deine Figur: ${characters[newIndex].name}`;
+  renderBoard();
+  // Chat lokal leeren
+  chatBox.innerHTML="";
+  chatInput.value="";
+}
+
+joinBtn.addEventListener("click", async ()=>{
+  const name = document.getElementById("nameInput").value.trim();
+  if(!name) return alert("Bitte gib einen Namen ein.");
+  const u = await auth.signInAnonymously();
+  me.uid = u.user.uid;
+  me.name = name;
+  await assignCharacter();
+  listenRealtime();
+});
+
+reshuffleBtn.addEventListener("click", newRoundLocal);
+document.getElementById("sendBtn").addEventListener("click", sendChat);
+chatInput.addEventListener("keydown", e=>{if(e.key==="Enter") sendChat();});
 
 });
 </script>
 </body>
-</html>
-    
-  </body>
-  
 </html>
