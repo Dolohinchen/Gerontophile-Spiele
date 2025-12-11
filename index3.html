@@ -192,7 +192,7 @@
   </main>
 </div>
 
-<!-- Ergebnis-Overlay -->
+
 <div class="result-overlay" id="resultOverlay" role="dialog" aria-modal="true">
   <div class="result-card" id="resultCard">
     <h2 id="resultTitle"></h2>
@@ -202,7 +202,7 @@
     </div>
   </div>
 </div>
-  <!-- Falschantwort-Bild -->
+  
 <div id="wrongImageOverlay" style="
   position:fixed;
   left:0; top:0; right:0; bottom:0;
@@ -222,10 +222,7 @@
 
 
 <script>
-/* --- DATEN: Autoren und Zitate (aus deiner Datei) ---
-   Die Zitate stammen aus der hochgeladenen Datei (siehe Referenz).
-   Jede Kette ist exakt zugeordnet zu einem Autor.
-*/
+
 const data = [
   { author: "Pilzi", quote: "Habts ihr noch nie Schnä gesehen oder was" },
   { author: "Pilzi", quote: "Fjünf" },
@@ -421,7 +418,7 @@ const data = [
   { author: "KINC", quote: "spauchdreiseldrüse" }
 ];
 
-/* --- Hilfsfunktionen --- */
+
 function shuffle(a){
   for(let i=a.length-1;i>0;i--){
     const j=Math.floor(Math.random()*(i+1));
@@ -433,7 +430,7 @@ function uniqueAuthors(){
   return Array.from(new Set(data.map(d=>d.author)));
 }
 
-/* --- Spielzustand --- */
+
 const TOTAL_ROUNDS = 5;
 let round = 0;
 let score = 0;
@@ -441,7 +438,7 @@ let usedQuotes = new Set();
 let current = null; // {author, quote}
 let availableQuotes = data.slice(); // remaining quotes to pick from
 
-/* --- DOM Referenzen --- */
+
 const quoteText = document.getElementById('quoteText');
 const namesList = document.getElementById('namesList');
 const dropZone = document.getElementById('dropZone');
@@ -454,7 +451,7 @@ const resultTitle = document.getElementById('resultTitle');
 const resultScore = document.getElementById('resultScore');
 const playAgainBtn = document.getElementById('playAgainBtn');
 
-/* --- Drag & Drop handlers --- */
+
 function onDragStart(e){
   e.dataTransfer.setData('text/plain', e.target.dataset.author);
   requestAnimationFrame(()=> e.target.classList.add('dragging'));
@@ -478,7 +475,7 @@ dropZone.addEventListener('drop', (e) => {
   handleGuess(droppedAuthor);
 });
 
-/* --- Spiel-Logik --- */
+
 function startGame(){
   round = 0;
   score = 0;
@@ -516,14 +513,14 @@ function nextRound(){
   renderCurrent();
   renderNames();
   updateUI();
-  // Note: round is incremented after user answers (so it starts at 0)
+  
 }
 
 function renderCurrent(){
   quoteText.textContent = current.quote;
   dropZone.textContent = 'Ziehe hier den Namen hin';
   dropZone.classList.remove('correct','wrong');
-  // make sure no leftover name highlights
+ 
   document.querySelectorAll('.name-card').forEach(n=> n.classList.remove('correct','wrong'));
 }
 
